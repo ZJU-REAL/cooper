@@ -28,6 +28,8 @@ Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Lar
 ## Table of Contents
 * [Motivation](#motivation)
 * [Highlights](#-highlights)
+* [Installation](#-installation)
+* [Quick Start](#-quick-start)
 * [Citation](#-citation)
 * [Acknowledgement](#-acknowledgement)
 
@@ -55,8 +57,32 @@ This is where **Cooper** comes in. Cooper introduces a framework that **co-optim
 *   ⚙️ **Dynamic Data Strategy**: Leverages a hybrid approach where high-precision rule-based rewards identify positive samples, and an assistant LLM generates challenging negative samples, constantly improving the reward model's accuracy.
 *   🚀 **Improved Performance & Robustness**: Experiments show that Cooper not only alleviates reward hacking but also improves end-to-end performance, achieving a 3.09% gain in average accuracy on Qwen2.5-1.5B-Instruct.
 ---
+## 🛠 Installation
+Our framework is built upon **Verl**.
 
+1.  **Create and activate a conda environment:**
+    ```bash
+    conda create -n Cooper python=3.10
+    conda activate Cooper
 
+    # pip install
+    pip install torch==2.6.0 
+
+    # install vLLM 0.8.2
+    pip install vllm==0.8.2
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    git clone https://github.com/zju-real/Cooper.git
+    cd Cooper
+    pip install -e .
+    ```
+    Please ensure you have a PyTorch version compatible with your CUDA drivers installed.
+
+---
+## 🚀 Quick Start
+To run Cooper, you can use the provided scripts. Here is a quick example of how to start training:
 
 ## 🙏 Acknowledgement
 

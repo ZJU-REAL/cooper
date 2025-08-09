@@ -29,7 +29,9 @@ Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Lar
 * [Motivation](#motivation)
 * [Highlights](#-highlights)
 * [Installation](#-installation)
+* [Dataset](#-dataset)
 * [Quick Start](#-quick-start)
+* [Main Result](#-main-result)
 * [Citation](#-citation)
 * [Acknowledgement](#-acknowledgement)
 
@@ -81,9 +83,67 @@ Our framework is built upon **Verl**.
     Please ensure you have a PyTorch version compatible with your CUDA drivers installed.
 
 ---
-## 🚀 Quick Start
-To run Cooper, you can use the provided scripts. Here is a quick example of how to start training:
+## 📊 Dataset
+We provide the dataset for training the VerifyRM in ```
+dataset/VerifyRM_training_data.parquet```. This dataset contains 58.7K pairs of questions, answers and completions, with the completetions labeled as either correct(1) or incorrect(0).
 
+---
+
+## 🚀 Quick Start
+### VerifyRM Training
+For training VerifyRM, please specify the ```model_path``` in ```train_VerifyRM/train.py```. The ```data_path``` is set by default to ```dataset/VerifyRM_training_data.parquet```.
+
+```bash
+bash train_VerifyRM/run.sh
+```
+### Cooper Training
+To start a training run with Cooper, you can use the provided shell script. For example, to train a 1.5B parameter model on gsm8k :
+
+```bash
+bash recipe/cooper/test_qwen2.5-1.5B-Instruct.sh
+```
+Modify the following configurations in training scripts:
+
+```bash
+gsm8k_train_path=/path/to/your/gsm8k/train.parquet
+gsm8k_test_path=/path/to/your/gsm8k/test.parquet
+model_name_or_path=/path/to/your/qwen2.5-1.5b-instruct
+reward_model_path=/path/to/your/reward_model
+collaborator_model_path=/path/to/your/assistant_model
+```
+
+---
+## Main Result
+### Reasoning Performance:
+For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8 samples per problem and computing the average accuracy to mitigate evaluation variance.
+| **Base Model** | **Reward Type** | **GSM8K** | **SVAMP** | **MATH500** | **OB-EN** | **Odyssey** | **Average** |
+|----------------|-----------------|-----------|-----------|-------------|-----------|-------------|-------------|
+| **Qwen2.5-1.5B-Instruct** | Baseline | 74.10 | 84.60 | 54.63 | 20.17 | 39.33 | 54.93 |
+| | Rule-based | <u>76.44</u> | <u>87.26</u> | <u>57.55</u> | **23.33** | <u>42.83</u> | <u>57.48</u> |
+| | Model-based | 30.78 | 72.04 | 29.70 | 1.43 | 11.89 | 38.91 |
+| | **Cooper (Ours)** | **77.02** | **87.65** | **58.05** | <u>23.22</u> | **44.17** | **58.02** |
+| **Llama-3.2-1B-Instruct** | Baseline | 50.39 | 71.33 | 29.58 | 6.41 | 34.77 | 38.50 |
+| | Rule-based | <u>56.56</u> | <u>72.24</u> | <u>34.20</u> | <u>7.95</u> | **40.02** | <u>42.19</u> |
+| | Model-based | 36.32 | 59.35 | 20.70 | 0.22 | 7.39 | 24.80 |
+| | **Cooper (Ours)** | **57.14** | **73.45** | **34.88** | **8.02** | <u>39.98</u> | **42.69** |
+
+### Training dynamics across RL training steps of Cooper：
+
+<div align="center">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+    <div style="flex: 1; text-align: center;">
+      <img src="figures/Cooper_accuracy.png" alt="Test Accuracy" style="width: 100%; max-width: 400px;" />
+      <p><em>Test set accuracy (%) </em></p>
+    </div>
+    <div style="flex: 1; text-align: center;">
+      <img src="figures/Cooopr_reward.png" alt="Training Reward" style="width: 100%; max-width: 400px;" />
+      <p><em>Train set reward</em></p>
+    </div>
+  </div>
+  <p><em>Training dynamics across RL training steps of Cooper</em></p>
+</div>
+
+---
 ## 🙏 Acknowledgement
 
 Our RL training code is built upon the excellent [Verl](https://github.com/volcengine/verl) framework. We extend our sincere gratitude to their team for open-sourcing their powerful library.

@@ -28,7 +28,7 @@ Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Lar
 
 ## Table of Contents
 * [Motivation](#motivation)
-* [Highlights](#-highlights)
+* [Highlights](#highlights)
 * [Installation](#-installation)
 * [Dataset](#-dataset)
 * [Quick Start](#-quick-start)
@@ -114,7 +114,7 @@ collaborator_model_path=/path/to/your/assistant_model
 ```
 
 ---
-## Main Result
+## 📈 Main Result
 ### Reasoning Performance:
 For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8 samples per problem and computing the average accuracy to mitigate evaluation variance.
 | **Base Model** | **Reward Type** | **GSM8K** | **SVAMP** | **MATH500** | **OB-EN** | **Odyssey** | **Average** |
@@ -133,11 +133,11 @@ For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8
 <div align="center">
   <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
     <div style="flex: 1; text-align: center;">
-      <img src="figures/Cooper_accuracy.png" alt="Test Accuracy" style="width: 100%; max-width: 400px;" />
+      <img src="figures/Cooper_accuracy.png" alt="Test Accuracy" style="width: 48%; max-width: 400px;" />
       <p><em>Test set accuracy (%) </em></p>
     </div>
     <div style="flex: 1; text-align: center;">
-      <img src="figures/Cooopr_reward.png" alt="Training Reward" style="width: 100%; max-width: 400px;" />
+      <img src="figures/Cooopr_reward.png" alt="Training Reward" style="width: 48%; max-width: 400px;" />
       <p><em>Train set reward</em></p>
     </div>
   </div>

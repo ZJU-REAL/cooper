@@ -20,7 +20,7 @@ Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Lar
 ---
 
 ## 🎉 News
-*   **[2025-8-9]** We release the code and dataset. Stay tuned!
+*   **[2025-8-9]** We release the code and dataset. 
 *   **[2025-8-7]** Our paper, **Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models**, is now available on arXiv!
 
 

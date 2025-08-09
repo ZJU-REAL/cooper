@@ -46,7 +46,7 @@ Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Lar
 This forces a difficult choice between a reward system that is precise but inflexible, and one that is adaptable but easily exploited. How can we get the best of both worlds?
 
 <div align="center">
-  <img src="./figures/intro-cooper.png" alt="Overthinking Problem" style="width: 90%; height: auto;" />
+  <img src="./figures/intro-cooper.png" alt="intro-cooper" style="width: 90%; height: auto;" />
 </div>
 
 This is where **Cooper** comes in. Cooper introduces a framework that **co-optimizes** both the policy and the reward model. It leverages the high precision of rule-based rewards to identify trustworthy positive samples, while an assistant LLM dynamically generates challenging negative samples.  This continuous stream of high-quality preference pairs is used to continuously refine the reward model, making it more robust and resistant to hacking. This dynamic process breaks the static reward dilemma, leading to more **stable** and **robust** RL training.
@@ -128,19 +128,11 @@ For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8
 | | Model-based | 36.32 | 59.35 | 20.70 | 0.22 | 7.39 | 24.80 |
 | | **Cooper (Ours)** | **57.14** | **73.45** | **34.88** | **8.02** | <u>39.98</u> | **42.69** |
 
+
 ### Training dynamics across RL training steps of Cooper：
 
 <div align="center">
-  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
-    <div style="flex: 1; text-align: center;">
-      <img src="figures/Cooper_accuracy.png" alt="Test Accuracy" style="width: 48%; max-width: 400px;" />
-      <p><em>Test set accuracy (%) </em></p>
-    </div>
-    <div style="flex: 1; text-align: center;">
-      <img src="figures/Cooopr_reward.png" alt="Training Reward" style="width: 48%; max-width: 400px;" />
-      <p><em>Train set reward</em></p>
-    </div>
-  </div>
+  <img src="figures/Training_dynamics.png" alt="Training Dynamics" style="width: 90%; max-width: 400px; display: inline-block;" />
   <p><em>Training dynamics across RL training steps of Cooper</em></p>
 </div>
 

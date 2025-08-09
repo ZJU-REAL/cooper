@@ -95,7 +95,8 @@ dataset/VerifyRM_training_data.parquet```. This dataset contains 58.7K pairs of 
 For training VerifyRM, please specify the ```model_path``` in ```train_VerifyRM/train.py```. The ```data_path``` is set by default to ```dataset/VerifyRM_training_data.parquet```.
 
 ```bash
-bash train_VerifyRM/run.sh
+cd train_VerifyRM
+bash run.sh
 ```
 ### Cooper Training
 To start a training run with Cooper, you can use the provided shell script. For example, to train a 1.5B parameter model on gsm8k :

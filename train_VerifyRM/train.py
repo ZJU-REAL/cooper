@@ -14,8 +14,8 @@ from transformers import DataCollatorWithPadding
 from transformers import Qwen2ForSequenceClassification
 import pandas as pd
 
-model_path = "../models/Qwen/Qwen2.5-Math-1.5B-Instruct"
-data_path = "dataset/VerifyRM_training_data.parquet"
+model_path = "/data/zju-46/shenyl/hf/model/Qwen/Qwen2.5-1.5B-Instruct/"
+data_path = "../dataset/VerifyRM_training_data.parquet"
 
 
 class BinaryRewardModelTrainer(Trainer):

@@ -1,7 +1,8 @@
 <div align="center">
 
 <h1 style="display: flex; justify-content: center; align-items: center; gap: 10px; margin: 0;">
-Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models
+  <img src="./figures/cooper_logo.png" alt="Cooper Logo" height="60" style="vertical-align: middle;" />
+  Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models
 </h1>
 <p align="center"><em></em></p>
 

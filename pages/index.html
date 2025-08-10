@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models">
+  <meta property="og:title" content="Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models"/>
+  <meta property="og:description" content="A framework that jointly optimizes both policy and reward models to mitigate reward hacking in reinforcement learning for large language models"/>
+  <meta property="og:url" content="https://zju-real.github.io/cooper/"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/images/cooper.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models">
+  <meta name="twitter:description" content="A framework that jointly optimizes both policy and reward models to mitigate reward hacking in reinforcement learning for large language models">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/cooper.png" />
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="reinforcement learning, reward hacking, co-optimization, RLHF, large language models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models</title>
+  <link rel="icon" type="image/x-icon" href="static/images/cooper_logo.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+
+<!-- HTML Structure -->
+<style>
+        .spatial-carousel {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0 auto;
+            color: #333;
+            background-color: white;
+            max-width: 1000px; /* Ensure the entire carousel doesn't exceed max content width */
+        }
+
+        .spatial-carousel .main-container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 20px;
+            align-items: stretch; /* Make containers stretch to fill height */
+            min-height: 400px; /* Minimum height to ensure proper centering */
+        }
+
+        .spatial-carousel .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 200px; /* Increased width for longer button names */
+            flex-shrink: 0;
+            justify-content: center; /* Center buttons vertically */
+            align-self: center; /* Center the entire button container */
+        }
+
+        .spatial-carousel .content-area {
+            flex-grow: 1;
+            max-width: calc(100% - 240px); /* Accommodate button width + gap */
+        }
+
+        /* Single-agent task buttons (green) */
+        .spatial-carousel .category-button.single-agent {
+            background-color: #d8f7f0; /* 浅绿色 */
+            border: 2px solid #4caf50; /* 绿色边框 */
+            border-radius: 25px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .spatial-carousel .category-button.single-agent:hover {
+            background-color: #c8e6c9; /* 略深的绿色悬停状态 */
+            transform: translateY(-2px);
+        }
+
+        .spatial-carousel .category-button.single-agent.active {
+            background-color: #4caf50; /* 激活状态绿色背景 */
+            color: white;
+        }
+
+        /* Multi-agent task buttons (blue) */
+        .spatial-carousel .category-button.multi-agent {
+            background-color: #e3f2fd; /* 浅蓝色 */
+            border: 2px solid #2196f3; /* 蓝色边框 */
+            border-radius: 25px;
+            padding: 8px 12px;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .spatial-carousel .category-button.multi-agent:hover {
+            background-color: #bbdefb; /* 略深的蓝色悬停状态 */
+            transform: translateY(-2px);
+        }
+
+        .spatial-carousel .category-button.multi-agent.active {
+            background-color: #2196f3; /* 激活状态蓝色背景 */
+            color: white;
+        }
+
+        .spatial-carousel .content-section {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .spatial-carousel .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .spatial-carousel .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .spatial-carousel .question-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .spatial-carousel .question {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .spatial-carousel .answer {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .spatial-carousel .question-type {
+            font-style: italic;
+            color: #666;
+        }
+
+        .spatial-carousel .image-container {
+            margin: 0 auto;
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .spatial-carousel .image-container img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            display: block;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .spatial-carousel .main-container {
+                flex-direction: column;
+            }
+
+            .spatial-carousel .button-container {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-bottom: 20px;
+            }
+
+            .spatial-carousel .category-button {
+                width: auto;
+            }
+
+            .spatial-carousel .content-area {
+                max-width: 100%;
+            }
+        }
+
+        /* Additional styles for better image presentation */
+        .result-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .result-image:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s ease;
+        }
+
+        .insight-box:hover {
+            transform: translateX(5px);
+        }
+
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #007bff, transparent);
+            margin: 3rem 0;
+        }
+    </style>
+
+<body>
+
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+        <a class="navbar-item" href="https://github.com/ZJU-REAL">
+        <span class="icon">
+            <i class="fab fa-github"></i>
+        </span>
+        </a>
+
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            More Research
+          </a>
+          <div class="navbar-dropdown">
+            <!-- 导航项将在这里动态加载 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+<script>
+    window.HELP_IMPROVE_VIDEOJS = false;
+
+    async function loadNavItems() {
+      try {
+        const response = await fetch('https://zju-real.github.io/paper-meta-info/meta.csv');
+        const csvText = await response.text();
+
+        // 简单的CSV解析
+        const rows = csvText.split('\n')
+          .map(row => row.trim())
+          .filter(row => row) // 移除空行
+          .map(row => {
+            const [name, url] = row.split(',').map(cell => cell.trim());
+            return { name, url };
+          });
+
+        return rows;
+      } catch (error) {
+        console.error('Error loading navigation items:', error);
+        return [];
+      }
+    }
+
+    $(document).ready(async function () {
+      // 加载导航项
+      const navItems = await loadNavItems();
+      const navDropdown = $('.navbar-dropdown');
+
+      // 清空现有的导航项
+      navDropdown.empty();
+
+      // 添加新的导航项
+      navItems.forEach(item => {
+        const navItem = $('<a></a>')
+          .addClass('navbar-item')
+          .attr('href', item.url)
+          .text(item.name);
+        navDropdown.append(navItem);
+      });
+
+      // carousel初始化代码
+      var options = {
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        loop: true,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 5000,
+      }
+
+      var carousels = bulmaCarousel.attach('.carousel', options);
+      bulmaSlider.attach();
+    });
+  </script>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <div style="margin-bottom: 1rem;">
+              <img src="static/images/cooper_logo.png" alt="Cooper Logo" style="height: 200px;"> 
+            </div>
+            <h1 class="title is-1 publication-title">Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models</h1>
+              <div class="is-size-5 publication-authors">
+                <!-- Paper authors -->
+                <span class="author-block">
+                  <a href="mailto:haitaohong@zju.edu.cn" target="_blank">Haitao Hong</a><sup>1*</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="mailto:yanyuchen@zju.edu.cn" target="_blank">Yuchen Yan</a><sup>1*</sup>,
+                </span>
+                <span class="author-block">
+                  Xingyu Wu<sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  Guiyang Hou<sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  Wenqi Zhang<sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  Weiming Lu<sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="mailto:syl@zju.edu.cn" target="_blank">Yongliang Shen</a><sup>1†</sup>,
+                </span>
+                <span class="author-block">
+                  Jun Xiao<sup>1</sup>
+                </span>
+              </div>
+
+              <div class="is-size-5 publication-authors">
+                <span class="author-block"><sup>1</sup>Zhejiang University</span>
+                <br>
+                <span class="author-block">Preprint. Under review.</span>
+                <span class="eql-cntrb"><small><br><sup>*</sup>Equal Contribution, <sup>†</sup>Corresponding Author</small></span>
+              </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- ArXiv Link -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/2508.05613" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="ai ai-arxiv"></i>
+                        </span>
+                        <span>arXiv</span>
+                        </a>
+                      </span>
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/ZJU-REAL/cooper" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- Dataset Link -->
+                <span class="link-block">
+                  <a href="https://github.com/ZJU-REAL/cooper/tree/main/dataset" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-database"></i>
+                  </span>
+                  <span>Dataset</span>
+                  </a>
+                </span>
+
+                <span class="link-block">
+                  <a href="https://zju-real.github.io/cooper/" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-globe"></i>  
+                  </span>
+                  <span>Project Page</span>
+                  </a>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <!-- Teaser image-->
+  <section class="hero teaser">
+    <div class="container is-max-desktop">
+      <div class="hero-body">
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <img src="static/images/cooper.png" alt="Cooper Framework Overview" style="max-width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+        </div>
+        <p style="font-size: 1.1em; line-height: 1.6;">
+            <b>Cooper</b> introduces a framework that <b>co-optimizes</b> both the policy and the reward model. It leverages the high precision of rule-based rewards to identify trustworthy positive samples, while an assistant LLM dynamically generates challenging negative samples.  This continuous stream of high-quality preference pairs is used to continuously refine the reward model, making it more robust and resistant to hacking. This dynamic process breaks the static reward dilemma, leading to more <b>stable</b> and <b>robust</b> RL training.</p>
+      </div>
+    </div>
+  </section>
+  <!-- End teaser image -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Large language models (LLMs) have demonstrated remarkable performance in reasoning tasks, where reinforcement learning (RL) serves as a key algorithm for enhancing their reasoning capabilities. Currently, there are two mainstream reward paradigms: model-based rewards and rule-based rewards. However, both approaches suffer from limitations: rule-based rewards lack robustness, while model-based rewards are vulnerable to reward hacking. To address these issues, we propose Cooper(Co-optimizing Policy Model and Reward Model), a RL framework that jointly optimizes both the policy model and the reward model. Cooper leverages the high precision of rule-based rewards when identifying correct responses, and dynamically constructs and selects positive-negative sample pairs for continued training the reward model. This design enhances robustness and mitigates the risk of reward hacking. To further support Cooper, we introduce a hybrid annotation strategy that efficiently and accurately generates training data for the reward model. We also propose a reference-based reward modeling paradigm, where the reward model takes a reference answer as input. Based on this design, we train a reward model named VerifyRM, which achieves higher accuracy on VerifyBench compared to other models of the same size. We conduct reinforcement learning using both VerifyRM and Cooper. Our experiments show that Cooper not only alleviates reward hacking but also improves end-to-end RL performance, for instance, achieving a 0.54% gain in average accuracy on Qwen2.5-1.5B-Instruct. Our findings demonstrate that dynamically updating reward model is an effective way to combat reward hacking, providing a reference for better integrating reward models into RL.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<section class="section hero is-small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3 has-text-centered">Methods</h2>
+          <div class="content has-text-justified" style="font-size: 1.05em; line-height: 1.7;">
+              <p>
+                  Our methods consist of two main components. The first part proposes a pipeline for constructing a
+                  <b>reference-based reward model VerifyRM</b>, which includes data collection and annotation strategies,
+                  as well as the training procedure for the reward model. The second part presents <b>Cooper</b>, a
+                  reinforcement learning algorithm that co-optimizes both the policy model and the reward model.
+                  In this framework, the RM trained in the first stage guides the policy model's updates within Cooper
+                  while being updated itself concurrently.
+              </p>
+              
+              <div class="box" style="background-color: #f8f9fa; border-left: 4px solid #007bff; margin: 1.5rem 0;">
+                <h4 class="title is-5">🎯 Training Recipe of VerifyRM</h4>
+                <p>
+                  Most existing reward models score input-output pairs directly. However, in reasoning tasks, there typically exists a reference answer. 
+                  We propose a method for constructing <b>reference-based reward models</b> to improve accuracy in reasoning tasks by incorporating 
+                  reference answers into the reward model input.
+                </p>
+                <ul>
+                  <li><b>Data Collection:</b> 65K problem-reference-completion triples from 7 mathematical reasoning datasets using 11 mainstream LLMs</li>
+                  <li><b>Hybrid Labeling:</b> Automated approach combining rule-based verifier (Math-verify) and LLM-as-a-judge (Qwen3-4B), resulting in 58.7K high-quality examples</li>
+                  <li><b>Model Training:</b> Text classifier with reference answer input, trained using binary cross-entropy loss</li>
+                </ul>
+              </div>
+
+              <div class="box" style="background-color: #f0f8f0; border-left: 4px solid #28a745; margin: 1.5rem 0;">
+                <h4 class="title is-5">🔄 Reinforcement Learning with Cooper</h4>
+                <p>
+                  Cooper enables simultaneous tuning of policy and reward models in a single training step through a two-stage process:
+                </p>
+                <div class="columns">
+                  <div class="column">
+                    <h5 class="title is-6">Stage 1: Policy Model Optimization</h5>
+                    <ul>
+                      <li>Sample responses using policy πθ</li>
+                      <li>Evaluate with reward model incorporating reference answers</li>
+                      <li>Compute advantage estimates and update policy via gradient</li>
+                      <li>Include KL divergence penalty for stability</li>
+                    </ul>
+                  </div>
+                  <div class="column">
+                    <h5 class="title is-6">Stage 2: Reward Model Optimization</h5>
+                    <ul>
+                      <li><b>Positive Sample Selection:</b> Use rule-based rewards' high precision to identify correct responses</li>
+                      <li><b>Negative Sample Generation:</b> Assistant LLM transforms correct reasoning into incorrect answers</li>
+                      <li>Optimize using contrastive learning to maximize score differences</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="box" style="background-color: #fff8e1; border-left: 4px solid #ff9800; margin: 1.5rem 0;">
+                <h4 class="title is-5">💡 Key Innovation: Dynamic Data Strategy</h4>
+                <p>
+                  Cooper's dynamic data strategy leverages the <b>high precision of rule-based rewards</b> for positive samples while using an 
+                  <b>assistant LLM to generate challenging negative samples</b>. This continuous stream of high-quality preference pairs 
+                  enables ongoing reward model refinement, making it more robust and resistant to hacking.
+                </p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Results Section -->
+<section class="section hero is-small">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3 has-text-centered">Main Experimental Results</h2>
+          <div style="text-align: center; margin: 2rem 0;">
+              <img src="static/images/main_results.png" alt="Main Experimental Results Table" style="max-width: 95%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+          </div>
+          <div class="content has-text-justified" style="font-size: 1.05em; line-height: 1.7;">
+              <p>
+                <b>Cooper achieves superior performance across diverse benchmarks.</b> Main Experimental Results Table demonstrates Cooper's effectiveness: on Qwen2.5-1.5B-Instruct, Cooper achieves 58.02% average accuracy, outperforming rule-based rewards (57.48%) while dramatically surpassing the collapsed static reward model (38.91%). The improvements are consistent across both base models and particularly pronounced on challenging tasks like Math Odyssey (44.17% vs 42.83%), suggesting co-optimization becomes increasingly valuable for complex reasoning.
+              </p>
+              <p>
+                <b>Static reward models suffer catastrophic failure from reward hacking.</b> The most striking finding is the severe degradation of static reward models: performance drops from 54.93% to 38.91% on Qwen2.5-1.5B-Instruct, a 16% relative decrease. This collapse, consistent across both architectures, empirically validates that reward hacking is a fundamental failure mode in RL for LLMs. Cooper not only prevents this catastrophic failure but achieves the highest performance, confirming that synchronized co-optimization successfully addresses the exploitation vulnerability inherent in fixed reward functions.
+              </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Analysis Section -->
+<section class="section hero is-small is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full">
+        <div class="content">
+          <h2 class="title is-3 has-text-centered">Analysis</h2>
+          <div class="content has-text-justified" style="font-size: 1.05em; line-height: 1.7;">
+              <p>
+                To understand the mechanisms underlying Cooper's effectiveness, we conduct a comprehensive analysis examining two key aspects: the <b>training dynamics</b> that reveal how Cooper prevents reward hacking and the <b>stability of the co-optimized reward model</b>.
+              </p>
+          </div>
+
+          <!-- Training Dynamics Analysis -->
+          <div style="margin: 3rem 0;">
+            <h3 class="title is-4 has-text-centered">Training Dynamics Analysis</h3>
+            
+            <!-- Single combined graph -->
+            <div style="text-align: center; margin: 2rem 0;">
+              <img src="static/images/Training_dynamics.png" alt="Cooper Training Dynamics" style="max-width: 90%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" />
+            </div>
+            <h4 class="title is-5 has-text-centered">Training Dynamics across RL Training Steps</h4>
+            
+            <div class="content has-text-justified" style="font-size: 1.05em; line-height: 1.7; margin-top: 1.5rem;">
+              <p>
+                To understand how Cooper prevents reward hacking, we examine the training dynamics shown above. The test accuracy on MATH500 (left) reveals a <b>critical divergence</b>: while rule-based rewards and Cooper show steady improvement, the static reward model catastrophically collapses around step 120, dropping from 58% to below 52%.
+              </p>
+              <p>
+                This collapse coincides with reward hacking visible in the training rewards (right), where the static model's training rewards unnaturally spike to near 1.0, indicating the policy has discovered exploits in the fixed reward function. In contrast, <b>Cooper maintains realistic reward levels around 0.5</b> throughout training while achieving the highest final accuracy (58.05%).
+              </p>
+            </div>
+
+            <div class="box" style="background-color: #fff3cd; border-left: 4px solid #ffc107; margin: 2rem 0;">
+              <h4 class="title is-5">🔍 Key Insight: Reward Hacking Prevention</h4>
+              <p class="has-text-justified">
+                This demonstrates that <b>synchronized updates successfully prevent the policy from gaming the reward signal</b> - as the policy evolves, the reward model adapts its decision boundaries, closing exploitation opportunities that would otherwise accumulate in a static system. The combined view clearly shows how Cooper's co-optimization approach maintains both stable rewards and superior performance.
+              </p>
+            </div>
+          </div>
+
+          <!-- Reward Model Stability Analysis -->
+          <div style="margin: 3rem 0;">
+            <h3 class="title is-4 has-text-centered">Stability of Reward Model throughout Training</h3>
+            
+            <div class="columns">
+              <div class="column is-half">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                  <img src="static/images/RM_accuracy.png" alt="Reward Model Accuracy" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 3px 12px rgba(0,0,0,0.1);" />
+                </div>
+                <h4 class="title is-5 has-text-centered">Accuracy of RM across Training Steps</h4>
+              </div>
+              <div class="column is-half">
+                <div class="content has-text-justified" style="font-size: 1.05em; line-height: 1.6; padding-top: 2rem;">
+                  <p>
+                    A potential concern with Cooper is whether continuous updates might destabilize the reward model. The figure tracks VerifyRM's accuracy on VerifyBench throughout training, showing <b>remarkable stability around 89.7%</b> with fluctuations below 0.5%.
+                  </p>
+                  <p>
+                    This stability emerges from our careful update mechanism: by using high-precision rule-based signals for positive examples and systematic perturbations for negatives, each update <b>reinforces correct decision boundaries</b> rather than introducing noise.
+                  </p>
+                  <p>
+                    The consistent performance confirms that co-optimization can be implemented without the instability typically associated with moving target problems, validating that our contrastive learning approach maintains verification quality while adapting to new policy distributions.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+</section>
+
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{hong2025coopercooptimizingpolicyreward,
+      title={Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models}, 
+      author={Haitao Hong and Yuchen Yan and Xingyu Wu and Guiyang Hou and Wenqi Zhang and Weiming Lu and Yongliang Shen and Jun Xiao},
+      year={2025},
+      eprint={2508.05613},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2508.05613}, 
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+
+  </body>
+  </html>

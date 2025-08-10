@@ -1,7 +1,7 @@
 <div align="center">
 
+<img src="./figures/cooper_logo.png" alt="Cooper Logo" height="100" style="vertical-align: baseline;" />
 <h1 style="display: flex; justify-content: center; align-items: center; gap: 10px; margin: 0;">
-  <img src="./figures/cooper_logo.png" alt="Cooper Logo" height="60" style="vertical-align: baseline;" />
   Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models
 </h1>
 <p align="center"><em></em></p>
@@ -18,14 +18,14 @@
   <p><em> An overview of the Cooper training framework. Each training step in Cooper consists of two stages: policy model optimization (blue area) and reward model optimization (green area).</em></p>
 </div>
 
----
+
 
 ## 🎉 News
 *   **[2025-8-9]** We release the code and dataset. 
 *   **[2025-8-7]** Our paper, **Cooper: Co-Optimizing Policy and Reward Models in Reinforcement Learning for Large Language Models**, is now available on arXiv!
 
 
----
+
 
 ## Table of Contents
 * [Motivation](#motivation)
@@ -37,7 +37,7 @@
 * [Citation](#-citation)
 * [Acknowledgement](#-acknowledgement)
 
----
+
 ## Motivation
  Existing RL methods face a critical dilemma in reward design:
 
@@ -47,20 +47,20 @@
 This forces a difficult choice between a reward system that is precise but inflexible, and one that is adaptable but easily exploited. How can we get the best of both worlds?
 
 <div align="center">
-  <img src="./figures/intro-cooper.png" alt="intro-cooper" style="width: 90%; height: auto;" />
+  <img src="./figures/intro-cooper.png" alt="intro-cooper" style="width: 60%; height: auto;" />
 </div>
 
 This is where **Cooper** comes in. Cooper introduces a framework that **co-optimizes** both the policy and the reward model. It leverages the high precision of rule-based rewards to identify trustworthy positive samples, while an assistant LLM dynamically generates challenging negative samples.  This continuous stream of high-quality preference pairs is used to continuously refine the reward model, making it more robust and resistant to hacking. This dynamic process breaks the static reward dilemma, leading to more **stable** and **robust** RL training.
 
 
----
+
 ## ✨ Highlights
 
 *   💡 **Co-Optimizing Framework**: Cooper is a novel framework to jointly and dynamically optimize both the policy and reward models during RL, breaking the limitations of static reward functions.
 *   🛡️ **Mitigates Reward Hacking**: By continuously updating the reward model with high-quality data, Cooper effectively prevents the policy model from exploiting its weaknesses, ensuring stable and meaningful training.
 *   ⚙️ **Dynamic Data Strategy**: Leverages a hybrid approach where high-precision rule-based rewards identify positive samples, and an assistant LLM generates challenging negative samples, constantly improving the reward model's accuracy.
 *   🚀 **Improved Performance & Robustness**: Experiments show that Cooper not only alleviates reward hacking but also improves end-to-end performance, achieving a 3.09% gain in average accuracy on Qwen2.5-1.5B-Instruct.
----
+
 ## 🛠 Installation
 Our framework is built upon **Verl**.
 
@@ -84,12 +84,12 @@ Our framework is built upon **Verl**.
     ```
     Please ensure you have a PyTorch version compatible with your CUDA drivers installed.
 
----
+
 ## 📊 Dataset
 We provide the dataset for training the VerifyRM in ```
 dataset/VerifyRM_training_data.parquet```. This dataset contains 58.7K pairs of questions, answers and completions, with the completetions labeled as either correct(1) or incorrect(0).
 
----
+
 
 ## 🚀 Quick Start
 ### VerifyRM Training
@@ -115,12 +115,12 @@ reward_model_path=/path/to/your/reward_model
 collaborator_model_path=/path/to/your/assistant_model
 ```
 
----
+
 ## 📈 Main Result
 ### Reasoning Performance:
 For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8 samples per problem and computing the average accuracy to mitigate evaluation variance.
 | **Base Model** | **Reward Type** | **GSM8K** | **SVAMP** | **MATH500** | **OB-EN** | **Odyssey** | **Average** |
-|----------------|-----------------|-----------|-----------|-------------|-----------|-------------|-------------|
+|-|--|--|--|-|--|-|-|
 | **Qwen2.5-1.5B-Instruct** | Baseline | 74.10 | 84.60 | 54.63 | 20.17 | 39.33 | 54.93 |
 | | Rule-based | <u>76.44</u> | <u>87.26</u> | <u>57.55</u> | **23.33** | <u>42.83</u> | <u>57.48</u> |
 | | Model-based | 30.78 | 72.04 | 29.70 | 1.43 | 11.89 | 38.91 |
@@ -138,12 +138,12 @@ For all evaluations, we use a temperature of 0.7 and top-p of 0.95, generating 8
   <p><em>Training dynamics across RL training steps of Cooper</em></p>
 </div>
 
----
+
 ## 🙏 Acknowledgement
 
 Our RL training code is built upon the excellent [Verl](https://github.com/volcengine/verl) framework. We extend our sincere gratitude to their team for open-sourcing their powerful library.
 
----
+
 ## 📄 Citation
 
 If you find Cooper useful in your research, please consider citing our work:

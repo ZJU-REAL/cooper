@@ -6,7 +6,7 @@ gsm8k_train_path=/path/to/your/gsm8k/train.parquet
 gsm8k_test_path=/path/to/your/gsm8k/test.parquet
 model_name_or_path=/path/to/your/qwen2.5-1.5b-instruct
 reward_model_path=/path/to/your/reward_model
-collaborator_model_path=/path/to/your/assistant_model
+collaborator_model_name=/path/to/your/assistant_model
 base_url=http://0.0.0.0:8000/v1
 python3 -m recipe.cooper.main_ppo \
     trainer.logger=['console'] \
@@ -14,7 +14,7 @@ python3 -m recipe.cooper.main_ppo \
     trainer.experiment_name='qwen2.5_0.5B' \
     trainer.n_gpus_per_node=1 \
     trainer.nnodes=1 \
-    trainer.save_freq=1 \
+    trainer.save_freq=10 \
     trainer.test_freq=5 \
     trainer.total_epochs=15 \
     trainer.default_local_dir=./ckpt \

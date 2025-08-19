@@ -1,0 +1,215 @@
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    _target_: hydra._internal.core_plugins.basic_launcher.BasicLauncher
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: RUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: .hydra
+  overrides:
+    hydra:
+    - hydra.mode=RUN
+    task:
+    - trainer.logger=[console]
+    - trainer.project_name=verl_grpo_test
+    - trainer.experiment_name=qwen2.5_0.5B
+    - trainer.n_gpus_per_node=1
+    - trainer.nnodes=1
+    - trainer.save_freq=1
+    - trainer.test_freq=5
+    - trainer.total_epochs=15
+    - trainer.default_local_dir=./ckpt
+    - algorithm.adv_estimator=grpo
+    - algorithm.kl_ctrl.kl_coef=0.001
+    - data.train_files=/home/honghaitao/data/SFT/gsm8k/train.parquet
+    - data.val_files=/home/honghaitao/data/SFT/gsm8k/test.parquet
+    - data.train_batch_size=4
+    - data.max_prompt_length=512
+    - data.max_response_length=512
+    - data.filter_overlong_prompts=True
+    - data.truncation=error
+    - data.return_raw_chat=True
+    - actor_rollout_ref.model.path=/data/zju-46/shenyl/hf/model/Qwen/Qwen2.5-0.5B-Instruct
+    - actor_rollout_ref.model.enable_gradient_checkpointing=True
+    - actor_rollout_ref.model.use_remove_padding=True
+    - actor_rollout_ref.actor.ppo_mini_batch_size=4
+    - actor_rollout_ref.actor.use_dynamic_bsz=True
+    - actor_rollout_ref.actor.ppo_max_token_len_per_gpu=16384
+    - actor_rollout_ref.actor.ulysses_sequence_parallel_size=1
+    - actor_rollout_ref.actor.use_kl_loss=True
+    - actor_rollout_ref.actor.kl_loss_coef=0.001
+    - actor_rollout_ref.actor.kl_loss_type=low_var_kl
+    - actor_rollout_ref.actor.optim.lr=1e-6
+    - actor_rollout_ref.actor.optim.lr_warmup_steps=20
+    - actor_rollout_ref.actor.fsdp_config.param_offload=False
+    - actor_rollout_ref.actor.fsdp_config.optimizer_offload=False
+    - actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=256
+    - actor_rollout_ref.rollout.tensor_model_parallel_size=1
+    - actor_rollout_ref.rollout.max_num_batched_tokens=2048
+    - actor_rollout_ref.rollout.name=vllm
+    - actor_rollout_ref.rollout.gpu_memory_utilization=0.8
+    - actor_rollout_ref.rollout.n=16
+    - actor_rollout_ref.rollout.free_cache_engine=False
+    - actor_rollout_ref.rollout.enforce_eager=False
+    - actor_rollout_ref.rollout.val_kwargs.top_p=0.95
+    - actor_rollout_ref.rollout.val_kwargs.temperature=0.7
+    - actor_rollout_ref.rollout.val_kwargs.n=1
+    - actor_rollout_ref.rollout.val_kwargs.do_sample=True
+    - actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=256
+    - actor_rollout_ref.ref.fsdp_config.param_offload=True
+    - reward_model.enable=True
+    - reward_model.is_update=True
+    - reward_model.reward_scale=False
+    - reward_model.model.path=/data/zju-46/shenyl/hf/model/skywork/skywork-reward-v2-llama-3.2-1B
+    - reward_model.model.fsdp_config.param_offload=True
+    - reward_model.model.fsdp_config.optimizer_offload=True
+    - reward_model.optim.lr=1e-5
+    - reward_model.optim.lr_warmup_steps_ratio=0.01
+    - reward_model.ppo_micro_batch_size_per_gpu=4
+    - reward_model.launch_reward_fn_async=True
+    - reward_model.collaborate.api_key=EMPTY
+    - reward_model.collaborate.concurrency_limit=64
+    - reward_model.collaborate.base_url=http://0.0.0.0:8000/v1
+    - reward_model.collaborate.model_name=/data/zju-46/shenyl/hf/model/Qwen/Qwen2.5-1.5B-Instruct
+  job:
+    name: main_ppo
+    chdir: null
+    override_dirname: actor_rollout_ref.actor.fsdp_config.optimizer_offload=False,actor_rollout_ref.actor.fsdp_config.param_offload=False,actor_rollout_ref.actor.kl_loss_coef=0.001,actor_rollout_ref.actor.kl_loss_type=low_var_kl,actor_rollout_ref.actor.optim.lr=1e-6,actor_rollout_ref.actor.optim.lr_warmup_steps=20,actor_rollout_ref.actor.ppo_max_token_len_per_gpu=16384,actor_rollout_ref.actor.ppo_mini_batch_size=4,actor_rollout_ref.actor.ulysses_sequence_parallel_size=1,actor_rollout_ref.actor.use_dynamic_bsz=True,actor_rollout_ref.actor.use_kl_loss=True,actor_rollout_ref.model.enable_gradient_checkpointing=True,actor_rollout_ref.model.path=/data/zju-46/shenyl/hf/model/Qwen/Qwen2.5-0.5B-Instruct,actor_rollout_ref.model.use_remove_padding=True,actor_rollout_ref.ref.fsdp_config.param_offload=True,actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=256,actor_rollout_ref.rollout.enforce_eager=False,actor_rollout_ref.rollout.free_cache_engine=False,actor_rollout_ref.rollout.gpu_memory_utilization=0.8,actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=256,actor_rollout_ref.rollout.max_num_batched_tokens=2048,actor_rollout_ref.rollout.n=16,actor_rollout_ref.rollout.name=vllm,actor_rollout_ref.rollout.tensor_model_parallel_size=1,actor_rollout_ref.rollout.val_kwargs.do_sample=True,actor_rollout_ref.rollout.val_kwargs.n=1,actor_rollout_ref.rollout.val_kwargs.temperature=0.7,actor_rollout_ref.rollout.val_kwargs.top_p=0.95,algorithm.adv_estimator=grpo,algorithm.kl_ctrl.kl_coef=0.001,data.filter_overlong_prompts=True,data.max_prompt_length=512,data.max_response_length=512,data.return_raw_chat=True,data.train_batch_size=4,data.train_files=/home/honghaitao/data/SFT/gsm8k/train.parquet,data.truncation=error,data.val_files=/home/honghaitao/data/SFT/gsm8k/test.parquet,reward_model.collaborate.api_key=EMPTY,reward_model.collaborate.base_url=http://0.0.0.0:8000/v1,reward_model.collaborate.concurrency_limit=64,reward_model.collaborate.model_name=/data/zju-46/shenyl/hf/model/Qwen/Qwen2.5-1.5B-Instruct,reward_model.enable=True,reward_model.is_update=True,reward_model.launch_reward_fn_async=True,reward_model.model.fsdp_config.optimizer_offload=True,reward_model.model.fsdp_config.param_offload=True,reward_model.model.path=/data/zju-46/shenyl/hf/model/skywork/skywork-reward-v2-llama-3.2-1B,reward_model.optim.lr=1e-5,reward_model.optim.lr_warmup_steps_ratio=0.01,reward_model.ppo_micro_batch_size_per_gpu=4,reward_model.reward_scale=False,trainer.default_local_dir=./ckpt,trainer.experiment_name=qwen2.5_0.5B,trainer.logger=[console],trainer.n_gpus_per_node=1,trainer.nnodes=1,trainer.project_name=verl_grpo_test,trainer.save_freq=1,trainer.test_freq=5,trainer.total_epochs=15
+    id: ???
+    num: ???
+    config_name: ppo_trainer
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.3'
+    cwd: /data/lab-49/honghaitao/Cooper
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /data/lab-49/honghaitao/Cooper/recipe/cooper/config
+      schema: file
+      provider: main
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: /data/lab-49/honghaitao/Cooper/outputs/2025-08-19/19-09-40
+    choices:
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: default
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: basic
+      hydra/output: default
+  verbose: false

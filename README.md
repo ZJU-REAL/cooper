@@ -8,7 +8,7 @@
 
 <p><em>A RL framework that jointly optimizes both the policy model and the reward model.</em></p>
 
-[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2508.05613) [![alphaXiv](https://img.shields.io/badge/discussion-A42C25?style=for-the-badge&logo=arxiv&logoColor=white&color=blue)](https://www.alphaxiv.org/abs/2508.05613) [![Github](https://img.shields.io/badge/Cooper-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ZJU-REAL/Cooper)[![Project](https://img.shields.io/badge/Project-Page-007ec6?style=for-the-badge)](https://zju-real.github.io/cooper)
+[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2508.05613) [![alphaXiv](https://img.shields.io/badge/discussion-A42C25?style=for-the-badge&logo=arxiv&logoColor=white&color=blue)](https://www.alphaxiv.org/abs/2508.05613) [![Github](https://img.shields.io/badge/Cooper-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ZJU-REAL/Cooper) 
 </div>
 
 <br>
